@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkillr - Onboarding</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Script to load theme before body paints -->
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('upSkillrData') || '{}');
+        if(savedData.theme) {
+            document.documentElement.setAttribute('data-theme', savedData.theme);
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark'); // Default to dark option
+        }
+    </script>
+</head>
+<body class="onboarding-body">
+    <nav class="top-nav">
+        <div class="nav-logo">
+            <div class="logo-icon">US</div>
+            <div class="logo-text">UpSkillr</div>
+        </div>
+    </nav>
+    
+    <a href="#" onclick="handleBack(); return false;" class="back-link"><i class="fa fa-arrow-left"></i> Previous Page</a>
+
+    <div class="onboarding-container glass-panel">
+        
+        <!-- Step 0: Theme Selection -->
+        <div id="step-theme" class="form-step active">
+            <h2>Choose Your Style</h2>
+            <p class="subtitle">Personalize your UpSkillr experience.</p>
+            <div class="theme-grid" id="theme-selector">
+                <div class="theme-card theme-pink" onclick="selectTheme(this, 'pink')">
+                    FANCY
+                </div>
+                <div class="theme-card theme-light" onclick="selectTheme(this, 'light-grey')">
+                    NORMAL
+                </div>
+                <div class="theme-card theme-dark active" onclick="selectTheme(this, 'dark')">
+                    DARK
+                </div>
+                <div class="theme-card theme-blue" onclick="selectTheme(this, 'blue')">
+                    FOCUS
+                </div>
+            </div>
+            <button class="btn btn-primary w-100 mt-4" onclick="nextStep('step-login')">Continue to Login</button>
+        </div>
+
+        <!-- Step 1: Login / Register -->
+        <div id="step-login" class="form-step">
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Enter your details to proceed.</p>
+            <div class="input-group">
+                <label>Username <span class="required-star">*</span></label>
+                <input type="text" id="username" placeholder="johndoe" required>
+            </div>
+            <div class="input-group">
+                <label>Email <span class="required-star">*</span></label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary w-100" onclick="sendOTP()">Continue</button>
+            </div>
+        </div>
+
+        <!-- Step 1.5: OTP Verification -->
+        <div id="step-otp" class="form-step">
+            <h2>Enter OTP</h2>
+            <p class="subtitle" id="otp-message">OTP sent to your email</p>
+            <div class="otp-group">
+                <input type="text" maxlength="1" class="otp-input" onkeyup="moveFocus(this, 'otp2')">
+                <input type="text" id="otp2" maxlength="1" class="otp-input" onkeyup="moveFocus(this, 'otp3')">
+                <input type="text" id="otp3" maxlength="1" class="otp-input" onkeyup="moveFocus(this, 'otp4')">
+                <input type="text" id="otp4" maxlength="1" class="otp-input">
+            </div>
+            <p id="otp-error" class="text-danger text-sm text-center hidden">Invalid OTP. Please try again.</p>
+            <button class="btn btn-primary w-100 mt-4" onclick="verifyOTP()">Verify & Continue</button>
+            <p class="text-center mt-4 text-sm"><a href="#" onclick="sendOTP(); return false;" class="text-accent">Resend OTP</a></p>
+        </div>
+
+        <!-- Step 2: Language Selection -->
+        <div id="step-language" class="form-step">
+            <h2>Select Language</h2>
+            <p class="subtitle">Global Language Selection</p>
+            <div class="input-group">
+                <label>Search and Select <span class="required-star">*</span></label>
+                <select id="user-language">
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="Bengali">Bengali</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Korean">Korean</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Turkish">Turkish</option>
+                    <option value="Thai">Thai</option>
+                    <option value="Vietnamese">Vietnamese</option>
+                    <option value="Indonesian">Indonesian</option>
+                    <option value="Swahili">Swahili</option>
+                    <option value="Malay">Malay</option>
+                    <option value="Dutch">Dutch</option>
+                </select>
+            </div>
+            <button class="btn btn-primary w-100 mt-4" onclick="nextStep('step-academic')">Continue</button>
+        </div>
+
+        <!-- Step 3: Academic Information -->
+        <div id="step-academic" class="form-step">
+            <h2>Academic Profile</h2>
+            <p class="subtitle">Select your grading system and enter your CGPA.</p>
+            <div class="input-group">
+                <label>Select CGPA Scale <span class="required-star">*</span></label>
+                <select id="cgpa-scale" onchange="updateCgpaMax()">
+                    <option value="10">Out of 10 (Standard)</option>
+                    <option value="4">Out of 4 (International)</option>
+                </select>
+                <p class="text-sm text-secondary mt-1">Select your university's grading system.</p>
+            </div>
+            <div class="input-group mt-2">
+                <label>Enter your CGPA <span class="required-star">*</span></label>
+                <input type="number" step="0.01" id="cgpa" placeholder="e.g. 8.5" max="10">
+            </div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary w-100" onclick="nextStep('step-skills')">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Skills -->
+        <div id="step-skills" class="form-step">
+            <h2>Your Skills</h2>
+            <p class="subtitle">Add your current skills and proficiency levels. If none, click N/A.</p>
+            <div class="skill-input-row" style="margin-bottom: 0.5rem;">
+                <input type="text" id="skill-name" placeholder="E.g., Python">
+                <select id="skill-level">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+                <button class="btn btn-primary" onclick="addSkill()"><i class="fa fa-plus"></i></button>
+            </div>
+            <button class="btn btn-outline w-100 mb-2" onclick="addSkillNA()">I don't have any skills yet (N/A)</button>
+            <div class="skills-list" id="skills-list"></div>
+            <div class="btn-group mt-2">
+                <button class="btn btn-primary w-100" onclick="nextStep('step-softskills')">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4.5: Soft Skills -->
+        <div id="step-softskills" class="form-step">
+            <h2 id="soft-title">Soft Skills</h2>
+            <p class="subtitle">Rate yourself on a scale of 1-10.</p>
+            <div class="input-group">
+                <label>Communication</label>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="range" id="skill-comm" min="1" max="10" value="5" oninput="document.getElementById('comm-val').innerText=this.value">
+                    <span id="comm-val" style="width: 20px; font-weight: bold;">5</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Problem Solving</label>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="range" id="skill-prob" min="1" max="10" value="5" oninput="document.getElementById('prob-val').innerText=this.value">
+                    <span id="prob-val" style="width: 20px; font-weight: bold;">5</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>System Design / Architecture</label>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="range" id="skill-design" min="1" max="10" value="5" oninput="document.getElementById('design-val').innerText=this.value">
+                    <span id="design-val" style="width: 20px; font-weight: bold;">5</span>
+                </div>
+            </div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary w-100" onclick="nextStep('step-projects')">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Projects -->
+        <div id="step-projects" class="form-step">
+            <h2>Your Projects</h2>
+            <p class="subtitle">List your key projects and technologies used. If none, click N/A.</p>
+            <div class="project-input-group">
+                <input type="text" id="project-title" placeholder="Project Title">
+                <input type="text" id="project-tech" placeholder="Technologies (comma separated)">
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button class="btn btn-outline" style="flex: 1;" onclick="addProject()">Add Project</button>
+                    <button class="btn btn-outline border-danger text-danger" style="flex: 1;" onclick="addProjectNA()">N/A</button>
+                </div>
+            </div>
+            <div class="projects-list" id="projects-list"></div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary w-100" onclick="nextStep('step-career')">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Career Goal Selection -->
+        <div id="step-career" class="form-step">
+            <h2>Career Goal</h2>
+            <p class="subtitle">What role are you aiming for?</p>
+            <div class="input-group">
+                <label>Select Domain & Role <span class="required-star">*</span></label>
+                <select id="career-goal">
+                    <option value="N/A">N/A - Undecided</option>
+                    <optgroup label="Software Development">
+                        <option value="Software Engineer">Software Engineer</option>
+                        <option value="Full Stack Developer">Full Stack Developer</option>
+                        <option value="Frontend Developer">Frontend Developer</option>
+                        <option value="Backend Developer">Backend Developer</option>
+                        <option value="Web Developer">Web Developer</option>
+                        <option value="Mobile App Developer">Mobile App Developer</option>
+                        <option value="Game Developer">Game Developer</option>
+                    </optgroup>
+                    <optgroup label="Artificial Intelligence & Data">
+                        <option value="AI Engineer">AI Engineer</option>
+                        <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Data Analyst">Data Analyst</option>
+                        <option value="Deep Learning Engineer">Deep Learning Engineer</option>
+                        <option value="NLP Engineer">NLP Engineer</option>
+                        <option value="Computer Vision Engineer">Computer Vision Engineer</option>
+                    </optgroup>
+                    <optgroup label="Cybersecurity">
+                        <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                        <option value="Ethical Hacker">Ethical Hacker</option>
+                        <option value="Security Engineer">Security Engineer</option>
+                        <option value="Digital Forensics Analyst">Digital Forensics Analyst</option>
+                        <option value="Penetration Tester">Penetration Tester</option>
+                    </optgroup>
+                    <optgroup label="Cloud & DevOps">
+                        <option value="Cloud Engineer">Cloud Engineer</option>
+                        <option value="DevOps Engineer">DevOps Engineer</option>
+                        <option value="Site Reliability Engineer">Site Reliability Engineer</option>
+                        <option value="Cloud Architect">Cloud Architect</option>
+                        <option value="Infrastructure Engineer">Infrastructure Engineer</option>
+                    </optgroup>
+                    <optgroup label="Design">
+                        <option value="UI Designer">UI Designer</option>
+                        <option value="UX Designer">UX Designer</option>
+                        <option value="Product Designer">Product Designer</option>
+                    </optgroup>
+                    <optgroup label="Product & Management">
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="Technical Program Manager">Technical Program Manager</option>
+                    </optgroup>
+                    <optgroup label="Emerging Technologies">
+                        <option value="Blockchain Developer">Blockchain Developer</option>
+                        <option value="AR/VR Developer">AR/VR Developer</option>
+                        <option value="IoT Engineer">IoT Engineer</option>
+                        <option value="Robotics Engineer">Robotics Engineer</option>
+                    </optgroup>
+                    <optgroup label="Research">
+                        <option value="AI Researcher">AI Researcher</option>
+                        <option value="Computer Science Researcher">Computer Science Researcher</option>
+                    </optgroup>
+                    <option value="Other">Other Career Goal...</option>
+                </select>
+                <input type="text" id="other-career" class="mt-2 hidden" placeholder="Type your career goal">
+            </div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary w-100" onclick="nextStep('step-links')">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 7: Optional Profile Links & Analysis -->
+        <div id="step-links" class="form-step">
+            <h2>Enhance Your Analysis</h2>
+            <p class="subtitle">Upload your resume or link professional profiles for deep insights.</p>
+            <div class="input-group">
+                <label><i class="fab fa-github"></i> GitHub Profile URL</label>
+                <input type="url" id="github-url" placeholder="https://github.com/username">
+            </div>
+            <!-- Added GitHub Questions for better analyzer logic -->
+            <div class="analysis-stat-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
+                <div class="input-group">
+                    <label>READMEs present?</label>
+                    <select id="github-readme">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Public Projects</label>
+                    <input type="number" id="github-project-count" placeholder="0" min="0">
+                </div>
+            </div>
+            <div class="input-group">
+                <label><i class="fab fa-linkedin"></i> LinkedIn Profile URL</label>
+                <input type="url" id="linkedin-url" placeholder="https://linkedin.com/in/username">
+            </div>
+            <div class="input-group">
+                <label><i class="fa fa-file-pdf"></i> Resume / CV Upload</label>
+                <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" onchange="handleFileUpload(this)">
+                <p id="file-status" class="text-sm text-success hidden">File ready for analysis</p>
+            </div>
+            <div class="btn-group mt-4">
+                <button class="btn btn-primary w-100" onclick="startAnalysis()">Start Advanced Analysis</button>
+            </div>
+            <p class="text-center mt-2 text-sm text-secondary">No data is stored externally. Everything is processed locally.</p>
+        </div>
+
+        <!-- Step 8: Analysis -->
+        <div id="step-analysis" class="form-step text-center">
+            <div class="analysis-loader">
+                <div class="radar-spinner"></div>
+            </div>
+            <h2 class="mt-4">AI Verification & Analysis</h2>
+            <div class="terminal-log" id="terminal-log">
+                <p>> Initializing AI Analysis Engine...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('career-goal').addEventListener('change', function(e) {
+            const otherInput = document.getElementById('other-career');
+            if (e.target.value === 'Other') {
+                otherInput.classList.remove('hidden');
+            } else {
+                otherInput.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

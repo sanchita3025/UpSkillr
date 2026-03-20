@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkillr - Learning Roadmap</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        const savedData = JSON.parse(localStorage.getItem('upSkillrData') || '{}');
+        if (savedData.theme) {
+            document.documentElement.setAttribute('data-theme', savedData.theme);
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="top-nav" style="padding: 1rem 2rem;">
+        <div class="nav-logo">
+            <div class="logo-icon" style="font-size: 1.8rem;">US</div>
+            <div class="logo-text" style="font-size: 1.4rem;">UpSkillr</div>
+        </div>
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <a href="index.html" style="color: var(--text-secondary); text-decoration: none;"><i class="fa fa-home"></i>
+                Home</a>
+            <a href="dashboard.html" style="color: var(--text-secondary); text-decoration: none;">Dashboard</a>
+            <a href="roadmap.html" style="color: var(--accent); text-decoration: none; font-weight: 600;">Roadmap</a>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;"
+                onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-grid">
+        <!-- Dashboard Header -->
+        <div class="full-width text-center mb-4">
+            <h2 data-translate="roadmap-title">Your Personalized Learning Roadmap</h2>
+            <p class="text-secondary" data-translate="roadmap-desc">Follow these steps to bridge your skill gap and
+                reach your career goal.</p>
+        </div>
+
+        <!-- Progress Track -->
+        <div class="glass-panel text-center roadmap-progress-card full-width">
+            <h3 data-translate="overall-progress">Overall Progress</h3>
+            <div class="progress-huge" id="roadmap-percentage">0%</div>
+            <div class="bar-track mt-4" style="height: 12px; background: rgba(255,255,255,0.05);">
+                <div class="bar-fill" id="roadmap-progress-bar" style="background: var(--success); width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Timeline Steps -->
+        <div class="full-width">
+            <div class="roadmap-timeline" id="roadmap-timeline">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Industry Trends -->
+        <div class="glass-panel full-width" style="padding: 1.5rem; margin-top: 1rem;">
+            <h3 class="card-title"><i class="fa fa-chart-line"></i> <span data-translate="industry-trends">Industry
+                    Trends 2026</span></h3>
+            <p class="text-sm text-secondary" data-translate="industry-trends-desc">Most in-demand skills in the current
+                tech market.</p>
+            <div class="trends-list">
+                <span class="trend-tag">AI Engineering</span>
+                <span class="trend-tag">MLOps</span>
+                <span class="trend-tag">Cloud Native Development</span>
+                <span class="trend-tag">Cybersecurity</span>
+                <span class="trend-tag">Data Engineering</span>
+                <span class="trend-tag">Web3 & Blockchain</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal-overlay hidden">
+        <div class="glass-panel text-center" style="padding: 2.5rem; max-width: 450px; width: 90%;">
+            <h2 style="color: var(--accent); margin-bottom: 0.5rem; font-size: 2.2rem;">Congratulations! 🎉</h2>
+            <p class="text-secondary mb-4" style="font-size: 1.1rem;">You have completed your entire learning roadmap.
+                How was your experience?</p>
+            <div id="star-rating" class="star-rating"
+                style="color: var(--text-secondary); margin-bottom: 2rem; display: flex; justify-content: center; gap: 0.75rem;">
+                <i class="fa fa-star" data-val="1"></i>
+                <i class="fa fa-star" data-val="2"></i>
+                <i class="fa fa-star" data-val="3"></i>
+                <i class="fa fa-star" data-val="4"></i>
+                <i class="fa fa-star" data-val="5"></i>
+            </div>
+            <button class="btn btn-primary w-100 mb-2" onclick="submitFeedback()">Submit Feedback</button>
+            <button class="btn btn-outline w-100 text-secondary" style="border-color: transparent;"
+                onclick="closeFeedback()">Not Now</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initRoadmap();
+        });
+    </script>
+</body>
+
+</html>
